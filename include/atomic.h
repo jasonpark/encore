@@ -33,9 +33,9 @@ static inline uint64_t atomic_cas64(volatile uint32_t *ptr, uint64_t value, uint
   return prev;                  
 }
 
-static inline int32_t atomic_add32 ( volatile void *ptr, uint32_t value)
+static inline uint32_t atomic_add32 ( volatile uint32_t *ptr, uint32_t value)
 {
-  int32_t result;
+  uint32_t result;
   
   asm volatile
   (
@@ -58,13 +58,13 @@ inline uint32 atomic_dec32(volatile uint32_t *ptr)
   return atomic_add32(ptr, (uint32_t)(-1));
 }
 
-static inline uint32_t atomic_fetchadd32 (volatile void *ptr, uint32_t value)
+static inline uint32_t atomic_fetchadd32 (volatile uint32_t *ptr, uint32_t value)
 {
   uint32_t result;
 
   asm volatile
   ( 
-      "lock; xadd %0, %1 \n\t"
+      "lock; xadd %0, %1"
     : "=r"(result), "=m" (*(ptr))
     : "0"(value), "m"(*(ptr))
     : "memory", "cc"
