@@ -3,16 +3,25 @@
 
 #include <stdint.h>
 
+
+/*
+ asm ( assembler template
+     : output operands
+     : input operands
+     : list of clobbered registers
+     );
+*/
+
+
 static inline uint32_t atomic_cas32 (volatile uint32_t *ptr, uint32_t value, unit32_t cmp)
 {
   uint32_t prev = cmp;
 
   asm volatile
-  ( 
-      "lock; cmpxchg %3, %1"
-    : "=a" (prev), "=m" (*(ptr))
-    : "0"  (prev), "r"  (value)
-    : "memory", "cc"
+  ("lock; cmpxchg %3, %1"
+  : "=a" (prev), "=m" (*(ptr))
+  : "0"  (prev), "r"  (value)
+  : "memory", "cc"
   );
 
   return prev;                  
@@ -23,11 +32,10 @@ static inline uint64_t atomic_cas64(volatile uint32_t *ptr, uint64_t value, uint
   uint64_t prev = cmp;
 
   asm volatile
-  ( 
-      "lock; cmpxchg q %3, %1"
-    : "=a" (prev), "=m" (*(ptr))
-    : "0" (prev), "r" (value)
-    : "memory", "cc"
+  ("lock; cmpxchg q %3, %1"
+  : "=a" (prev), "=m" (*(ptr))
+  : "0" (prev), "r" (value)
+  : "memory", "cc"
   );
 
   return prev;                  
@@ -38,11 +46,10 @@ static inline uint32_t atomic_add32 ( volatile uint32_t *ptr, uint32_t value)
   uint32_t result;
   
   asm volatile
-  (
-      "lock; xadd %1, %0"
-    : "+m"(*ptr), "=r"(result)
-    : (%0, %1) "1"(value)
-    : "memory", "cc"
+  ("lock; xadd %1, %0"
+  : "+m"(*ptr), "=r"(result)
+  : (%0, %1) "1"(value)
+  : "memory", "cc"
   );
     
   return result;
@@ -63,11 +70,10 @@ static inline uint32_t atomic_fetchadd32 (volatile uint32_t *ptr, uint32_t value
   uint32_t result;
 
   asm volatile
-  ( 
-      "lock; xadd %0, %1"
-    : "=r"(result), "=m" (*(ptr))
-    : "0"(value), "m"(*(ptr))
-    : "memory", "cc"
+  ("lock; xadd %0, %1"
+  : "=r"(result), "=m" (*(ptr))
+  : "0"(value), "m"(*(ptr))
+  : "memory", "cc"
   );
 
  return result;     
@@ -79,8 +85,7 @@ static inline void pause_cycle(uint32_t cycles)
 
   while(--i >=0 ) {
     asm volatile
-    ( 
-      "pause;"
+    ( "pause;"
     );
   }
   return;
