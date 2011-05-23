@@ -42,7 +42,7 @@ static inline uint32_t atomic_add32 ( volatile uint32_t *ptr, uint32_t value)
       "lock; xadd %1, %0"
     : "+m"(*ptr), "=r"(result)
     : (%0, %1) "1"(value)
-    : "memory:, "cc"
+    : "memory", "cc"
   );
     
   return result;
