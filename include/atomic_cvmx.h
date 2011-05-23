@@ -82,15 +82,6 @@ static inline uint64_t atomic_cas64(uint64_t *ptr, uint64_t old, uint64_t new)
     sync();
     return (ret);
 }
-   
-  
-   return result;
-}
-  
-   
-
-
-
 
 #ifdef __cplusplus
 }
