@@ -1,4 +1,4 @@
-#ifdef  ATOMIC_H
+#ifndef  ATOMIC_H
 #define ATOMIC_H
 
 #include <stdint.h>
