@@ -16,6 +16,7 @@ extern "C" {
      );
 */
 
+#if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)) 
 
 static inline uint32_t atomic_cas32 (volatile uint32_t *ptr, uint32_t value, unit32_t cmp)
 {
@@ -93,6 +94,9 @@ static inline uint32_t atomic_fetch_and_add32 (volatile uint32_t *ptr, uint32_t 
 
  return result;     
 }
+
+#endif 
+
 
 #ifdef __cplusplus
 } 
