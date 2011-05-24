@@ -7,9 +7,7 @@
 extern "C" {
 #endif
 
-/* atomic library supports 
-   acquire                 : read
-   release                 : write
+/* atomic operation 
    sequentially consistent : fetch_and_store, fetch_and_add, compare_and_swap(cas) 
  */
 
@@ -55,28 +53,28 @@ static inline uint32_t atomic_fetch_and_add32 (volatile uint32_t *ptr, uint32_t 
  return result;     
 }
 
-static inline uint32_t atomic_cas32 (volatile uint32_t *ptr, uint32_t value, unit32_t cmp)
+static inline uint32_t atomic_cas32 (volatile uint32_t *ptr, uint32_t expected, unit32_t new)
 {
-  uint32_t prev = cmp;
+  uint32_t prev = new;
 
   asm volatile
   ("lock; cmpxchg %3, %1"
   : "=a" (prev), "=m" (*(ptr))
-  : "0"  (prev), "r"  (value)
+  : "0"  (prev), "r"  (expected)
   : "memory", "cc"
   );
 
   return prev;                  
 }
 
-static inline uint64_t atomic_cas64(volatile uint32_t *ptr, uint64_t old, uint64_t new)
+static inline uint64_t atomic_cas64(volatile uint64_t *ptr, uint64_t expected, uint64_t new)
 {
   uint64_t prev = new;
 
   asm volatile
   ("lock; cmpxchg q %3, %1"
   : "=a" (prev), "=m" (*(ptr))
-  : "0" (prev), "r" (old)
+  : "0" (prev), "r" (expected)
   : "memory", "cc"
   );
 
