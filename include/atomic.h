@@ -3,6 +3,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /*
  asm ( assembler template
@@ -90,16 +94,8 @@ static inline uint32_t atomic_fetch_and_add32 (volatile uint32_t *ptr, uint32_t 
  return result;     
 }
 
-static inline void pause_cycle(uint32_t cycles) 
-{
-  uint32_t i = cycles;
-
-  while(--i >=0 ) {
-    asm volatile
-    ( "pause;"
-    );
-  }
-  return;
-}
+#ifdef __cplusplus
+} 
+#endif 
 
 #endif  ATOMIC_H
