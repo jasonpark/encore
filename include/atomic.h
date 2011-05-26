@@ -53,23 +53,23 @@ static inline uint32_t atomic_fetch_and_add32 (volatile uint32_t *ptr, uint32_t 
  return result;     
 }
 
-static inline uint32_t atomic_cas32 (volatile uint32_t *ptr, uint32_t expected, uint32_t new)
+static inline uint32_t atomic_cas32 (volatile uint32_t *ptr, uint32_t expectedValue, uint32_t newValue)
 {
-  uint32_t prev = new;
+  uint32_t prev = newValue;
 
   asm volatile
   ("lock; cmpxchg %3, %1"
   : "=a" (prev), "=m" (*(ptr))
-  : "0"  (prev), "r"  (expected)
+  : "0"  (prev), "r"  (expectedValue)
   : "memory", "cc"
   );
 
   return prev;                  
 }
 
-static inline uint64_t atomic_cas64(volatile uint64_t *ptr, uint64_t expected, uint64_t new)
+static inline uint64_t atomic_cas64(volatile uint64_t *ptr, uint64_t expected, uint64_t newValue)
 {
-  uint64_t prev = new;
+  uint64_t prev = newValue;
 
   asm volatile
   ("lock; cmpxchg q %3, %1"
@@ -88,4 +88,4 @@ static inline uint64_t atomic_cas64(volatile uint64_t *ptr, uint64_t expected, u
 } 
 #endif 
 
-#endif  ATOMIC_H
+#endif  
